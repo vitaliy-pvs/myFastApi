@@ -61,7 +61,7 @@ student_data = {
     "date_of_birth": date(2000, 1, 1),
     "email": "ivan.ivanov@example.com",
     "address": "Москва, ул. Пушкина, д. Колотушкина",
-    "enrollment_year": 1022,
+    "enrollment_year": 2022,
     "major": "Информатика",
     "course": 3,
     "special_notes": "Увлекается программированием"

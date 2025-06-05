@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from utils import json_to_dict_list
 import os
 from typing import Optional
+from app.student import Student as SStudent
 
 path_to_json = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'students.json')
 
@@ -12,6 +13,13 @@ app = FastAPI()
 def home_page():
     return {"message": "Привет, Хабр!"}
 
+
+@app.get("/student")
+def get_student_from_param_id(student_id: int) -> SStudent:
+    students = json_to_dict_list(path_to_json)
+    for student in students:
+        if student["student_id"] == student_id:
+            return student
 
 @app.get("/students/{course}")
 def get_all_students_course(course: int, major: Optional[str] = None, enrollment_year: Optional[int] = 2018):

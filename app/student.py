@@ -1,7 +1,7 @@
 from enum import Enum
 from pydantic import BaseModel, EmailStr, Field, field_validator, ValidationError
 from datetime import date, datetime
-from typing import Optional
+from typing import Optional, Any
 import re
 
 
@@ -44,6 +44,20 @@ class Student(BaseModel):
             raise ValueError('Дата рождения должна быть в прошлом')
         return values
 
+
+class SUpdateFilter(BaseModel):
+    student_id: int
+
+
+# Определение модели для новых данных студента
+class SStudentUpdate(BaseModel):
+    course: int = Field(..., ge=1, le=5, description="Курс должен быть в диапазоне от 1 до 5")
+    major: Optional[Major] = Field(..., description="Специальность студента")
+
+
+class SDeleteFilter(BaseModel):
+    key: str
+    value: Any
 
 def test_valid_student(data: dict) -> None:
     try:

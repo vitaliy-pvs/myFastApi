@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from utils import *
 import os
 from typing import Optional, List
-from app.student import Student as SStudent
+from app.student import Student as SStudent, SUpdateFilter, SStudentUpdate, SDeleteFilter
 
 path_to_json = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'students.json')
 
@@ -69,3 +69,21 @@ def add_student_handler(student: SStudent):
         return {"message": "Студент успешно добавлен!"}
     else:
         return {"message": "Ошибка при добавлении студента"}
+
+
+@app.put("/update_student")
+def update_student_handler(filter_student: SUpdateFilter, new_data: SStudentUpdate):
+    check = upd_student(filter_student.dict(), new_data.dict())
+    if check:
+        return {"message": "Информация о студенте успешно обновлена!"}
+    else:
+        raise HTTPException(status_code=400, detail="Ошибка при обновлении информации о студенте")
+
+
+@app.delete("/delete_student")
+def delete_student_handler(filter_student: SDeleteFilter):
+    check = dell_student(filter_student.key, filter_student.value)
+    if check:
+        return {"message": "Студент успешно удален!"}
+    else:
+        raise HTTPException(status_code=400, detail="Ошибка при удалении студента")
